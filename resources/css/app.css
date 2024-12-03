@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer utilities {
+    .dropdown-enter {
+        @apply opacity-0 scale-95;
+    }
+    .dropdown-enter-active {
+        @apply opacity-100 scale-100 transition duration-300 ease-in-out;
+    }
+}
+
+.nav-button:hover + .dropdown-menu,
+.dropdown-menu:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
