@@ -13,24 +13,24 @@ class UsersTableSeeder extends Seeder
         
         // Create students
         User::create([
-            'name' => 'John Doe',
-            'username' => 'student@example.com',
+            'name' => 'William',
+            'username' => 'student@del.ac.id',
             'password' => Hash::make('student'),
             'role' => 'student',
         ]);
 
         // Create lecturers
         User::create([
-            'name' => 'Jane Doe',
-            'username' => 'lecturer@example.com',
+            'name' => 'Febiola',
+            'username' => 'lecturer@del.ac.id',
             'password' => Hash::make('lecturer'),
             'role' => 'lecturer',
         ]);
 
         // Create coordinators
         User::create([
-            'name' => 'Coordinator One',
-            'username' => 'coordinator@example.com',
+            'name' => 'Bu Ranti',
+            'username' => 'coordinator@del.ac.id',
             'password' => Hash::make('coordinator'),
             'role' => 'coordinator',
         ]);

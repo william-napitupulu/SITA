@@ -326,7 +326,7 @@ return [
             'text' => 'Dashboard',
             'url' => 'dashboard',
             'icon' => 'fas fa-tachometer-alt',
-            'can' => 'isStudent'
+            
 
         ],
     
@@ -365,17 +365,19 @@ return [
         ],
         
 
-
         [
-            'text' => 'Approve Aligibility',
-            'url' => '#',
-            'can' => 'isCoordinator'
+            'text' => 'Approve Eligibility',
+            'url' => 'eligibility-approve',
+            'can' => 'isCoordinator',
+            'icon' => 'fas fa-book'
+
         ],
 
         [
             'text' => 'Assign Student',
-            'url' => '#',
-            'can' => 'isCoordinator'
+            'url' => 'assign-student',
+            'can' => 'isCoordinator',
+            'icon' => 'fas fa-users'
 
         ],
 
@@ -383,7 +385,7 @@ return [
             'text' => 'Student Data',
             'url' => 'student-data',
             'icon' => 'fas fa-user-plus', 
-            'can' => 'isCoordinator,lecturer'
+            'can' => 'isLecturerOrCoordinator'
 
         ],
 
@@ -391,61 +393,11 @@ return [
             'text' => 'Academic Year',
             'url' => '#',
             'icon' => 'fas fa-calendar-alt',
-            'can' => 'isCoordinator,lecturer'
+            'can' => 'isLecturerOrCoordinator'
             
 
         ],
 
-        
-
-        ['header' => 'WEB SEKOLAH'],
-
-        [
-            'text' => 'Beranda',
-            'icon' => 'fas fa-home',
-            'submenu' => [
-                [
-                    'text' => 'Informasi Dasar',
-                    'url' => 'beranda/information',
-                    'icon' => 'fas fa-info-circle',
-                ],
-            ],
-        ],
-
-
-
-        [
-            'text' => 'Profil',
-            'icon' => 'fas fa-id-card', // Profile card icon for Profil
-            'submenu' => [
-                [
-                    'text' => 'Informasi Dasar',
-                    'url' => 'profile/informasi-dasar',
-                    'icon' => 'fas fa-info-circle', // Info icon for Informasi Dasar
-                ],
-                [
-                    'text' => 'Staf Guru & Karyawan',
-                    'url' => 'profile/staff',
-                    'icon' => 'fas fa-users', // Users icon for Staf Guru & Karyawan
-                ],
-                [
-                    'text' => 'Prestasi',
-                    'url' => 'profile/prestasi',
-                    'icon' => 'fas fa-trophy', // Trophy icon for Prestasi
-                ],
-                [
-                    'text' => 'Alumni',
-                    'url' => 'profile/alumni',
-                    'icon' => 'fas fa-user-graduate', // Graduation icon for Alumni
-                ],
-            ],
-        ],
-        [
-            'text' => 'Sarana & Prasarana',
-            'url'  => 'sarana-prasarana',
-            'icon' => 'fas fa-building',
-        ],    
-        
     ],
 
 

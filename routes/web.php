@@ -11,6 +11,8 @@ use App\Http\Controllers\ThesisController;
 use App\Http\Controllers\EligibilityController;
 use App\Http\Controllers\ThesisHandbookController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\AssignStudentController;
+
 
 
 
@@ -39,8 +41,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/thesis2', [ThesisController::class, 'showThesisPage2'])->name('thesis2');
 
     // Eligibility Routes
-    Route::get('/eligibility', [EligibilityController::class, 'showForm'])->name('eligibility');
+    Route::get('/eligibility', [EligibilityController::class, 'showForm'])->name('eligibilityForm');
     Route::post('/eligibility', [EligibilityController::class, 'submitForm'])->name('eligibility.submit');
+    Route::get('/eligibility-approve', [EligibilityController::class, 'index'])->name('eligibility');
+    Route::post('/eligibility/approve/{id}', [EligibilityController::class, 'approve'])->name('eligibility.approve');
+    Route::post('/eligibility/disapprove/{id}', [EligibilityController::class, 'disapprove'])->name('eligibility.disapprove');
+
 
     // Thesis Handbook Route
     Route::get('/thesis-handbook', [ThesisHandbookController::class, 'index'])->name('thesis-handbook');
@@ -50,11 +56,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/get-students/{supervisorId}', [StudentController::class, 'getStudentsBySupervisor'])->name('getStudentsBySupervisor');
 
 
+    // Asign Student Routes
+    Route::get('assign-student', [AssignStudentController::class, 'index'])->name('assign.student');
+
+
    // Student specific routes
    Route::get('/student/dashboard', [UserController::class, 'index'])->middleware('can:isStudent');
     
    // Lecturer specific routes
-   Route::get('/lecturer/dashboard', [UserController::class, 'index'])->middleware('can:isCoordinator,lecturer');
+   Route::get('/lecturer/dashboard', [UserController::class, 'index'])->middleware('can:isLecturerOrCoordinator');
    
    // Coordinator specific routes
    Route::get('/coordinator/dashboard', [UserController::class, 'index'])->middleware('can:isCoordinator');

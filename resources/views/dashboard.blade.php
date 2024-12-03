@@ -7,12 +7,25 @@
   <div class="page-title">
     <h1 class="mr-2 text-primary">Dashboard</h1>
   </div>
-  <small class="text-muted">text</small>
+  <small class="text-muted">Home > Dashboard</small>
 </div>
 @stop
 
 @section('content')
+
+<div class="d-flex justify-content-center align-items-center p-3 bg-white w-100">
+  <!-- Welcome to Sita Banner (Styled to match the image) -->
+  <div class="row justify-content-center mb-4 w-100">
+    <div class="col-md-12 text-center">
+      <div class="alert text-center">
+        <h2 class="d-inline-block align-middle ml-3">Welcome to Sita (Sistem Informasi Tugas Akhir) - FITE</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container bg-white p-4 mt-4 rounded shadow-sm">
+
   <div class="row justify-content-center mb-4">
     <!-- Active Students -->
     <div class="col-md-4 col-sm-6 mb-3">
@@ -21,7 +34,7 @@
           <h3 class="card-title">Active Students</h3>
         </div>
         <div class="card-body">
-          <h4 class="mb-3">500</h4> <!-- Static Number for Active Students -->
+          <h4 class="mb-3">{{ $activeStudentsCount }}</h4> <!-- Display Active Students Count -->
         </div>
       </div>
     </div>
@@ -33,7 +46,7 @@
           <h3 class="card-title">Active Lecturers</h3>
         </div>
         <div class="card-body">
-          <h4 class="mb-3">120</h4> <!-- Static Number for Active Lecturers -->
+          <h4 class="mb-3">{{ $activeLecturersCount }}</h4> <!-- Display Active Lecturers Count -->
         </div>
       </div>
     </div>
@@ -44,9 +57,9 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header text-black">
-          <h3 class="card-title">Students Who Passed Each Year</h3>
+          <h3 class="card-title text-center">Number of Graduates per Academic Year</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body text-center">
           <canvas id="studentsPassedChart"></canvas>
         </div>
       </div>
@@ -57,89 +70,49 @@
 
 @section('css')
 <link rel="stylesheet" href="/css/admin_custom.css">
-<style>
-  /* Custom styles for the Thesis Handbook Page */
-  
-  .content-header {
-    padding: 0 !important; /* Removes padding from the container */
-  }
-
-  .content-header .container-fluid {
-    padding-left: 0; /* Removes left padding */
-    padding-right: 0; /* Removes right padding */
-  }
-
-  .card-header {
-    font-weight: bold;
-  }
-
-  .card-body p {
-    margin: 0;
-  }
-
-  .card-title {
-    font-size: 24px;
-  }
-
-  .card-body th {
-    background-color: #CFE2FF;
-  }
-
+<style>  
   #studentsPassedChart {
-    width: 100%;
-    height: 300px;
-  }
+    max-width: 100%;    /* Ensure the chart takes the full width of its parent container */
+    height: 350px;      /* Define the height of the chart */
+    margin: 0 auto;     /* Centers the chart horizontally */
+}
 
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .container {
     max-width: 1200px;
   }
-
-  .page-title {
-    color: #007bff;
-  }
-
-  .card {
-    border-radius: 10px;
-  }
-
   .card-body h4 {
     font-size: 2rem;
     font-weight: bold;
   }
-
   .card-header {
     background-color: #f8f9fa;
   }
-
   .card-body {
     background-color: #ffffff;
   }
-
-  /* Align content to the center */
   .row.justify-content-center {
     justify-content: center !important;
   }
-
-  /* Style for the chart */
-  #studentsPassedChart {
-    width: 100%;
-    height: 350px;
-  }
-
 </style>
 @stop
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Static data for Students Passed Each Year
-  const yearData = [2019, 2020, 2021, 2022, 2023];
-  const passedData = [350, 400, 450, 500, 550]; // Static data of students who passed each year
+  // Data passed from the controller
+  const passingStudentsPerYear = @json($passingStudentsPerYear);
+  const yearData = Object.keys(passingStudentsPerYear);  // Get years (2013-2020)
+  const passedData = Object.values(passingStudentsPerYear);  // Get the student counts for each year
 
   // Initialize the Chart.js chart
   const ctx = document.getElementById('studentsPassedChart').getContext('2d');
   const studentsPassedChart = new Chart(ctx, {
-    type: 'line', // Line chart to show trends over the years
+    type: 'line',
     data: {
       labels: yearData,
       datasets: [{
@@ -147,7 +120,7 @@
         data: passedData,
         borderColor: '#007bff',
         fill: false,
-        tension: 0.1, // Smooth curve
+        tension: 0.1,
       }]
     },
     options: {
