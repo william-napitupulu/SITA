@@ -5,29 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class Coordinator extends Model
 {
     use HasFactory;
 
-    // Specify the table name if it's not the default (Laravel will use plural form by default)
-    protected $table = 'students';
+    // Specify the table name if it's not the default (Laravel uses plural form by default)
+    protected $table = 'coordinators';
 
     // Define which attributes are mass assignable
     protected $fillable = [
-        'dim_id',
-        'user_id',
+        'pegawai_id',
+        'dosen_id',
+        'nip',
         'username',
         'password',
         'role',
-        'nim',
-        'name',
+        'nama',
         'email',
         'prodi_id',
-        'prodi_name',
-        'fakultas',
-        'angkatan',
-        'status',
-        'asrama',
+        'prodi',
+        'jabatan_akademik',
+        'jabatan_akademik_desc',
+        'jenjang_pendidikan',
+        'nidn',
+        'user_id',
     ];
 
     // You can add relationships, accessors, or mutators here if needed

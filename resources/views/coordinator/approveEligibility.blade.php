@@ -10,54 +10,40 @@
 @stop
 
 @section('content')
-<div class="container bg-white p-4 mt-4 rounded shadow-sm">
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
-
-    <!-- Eligibility Table -->
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">Eligibility Status</h4>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($eligibilities as $eligibility)
-                        <tr>
-                            <td>{{ $eligibility->user->name }}</td>
-                            <td>{{ $eligibility->user->email }}</td>
-                            <td>{{ $eligibility->is_eligible ? 'Approved' : 'Not Approved' }}</td>
-                            <td>
-                                @if(!$eligibility->is_eligible)
-                                    <form action="{{ url('eligibility/approve/' . $eligibility->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                                    </form>
-                                @else
-                                    <form action="{{ url('eligibility/disapprove/' . $eligibility->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger btn-sm">Disapprove</button>
-                                    </form>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+<div class="container">
+    <h2>Requests</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($requests as $request)
+            <tr>
+                <td>{{ $request->user->name }}</td>
+                <td>{{ ucfirst($request->status) }}</td>
+                <td>
+                    @if($request->status === 'pending')
+                    <form action="{{ route('request.approve', $request->id) }}" method="POST">
+                        @csrf
+                        <button class="btn btn-success">Approve</button>
+                    </form>
+                    <form action="{{ route('request.reject', $request->id) }}" method="POST">
+                        @csrf
+                        <textarea name="comments" placeholder="Add comments"></textarea>
+                        <button class="btn btn-danger">Reject</button>
+                    </form>
+                    @else
+                    {{ ucfirst($request->status) }}
+                    @endif
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
 @stop
 

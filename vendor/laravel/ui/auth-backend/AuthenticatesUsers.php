@@ -5,7 +5,10 @@ namespace Illuminate\Foundation\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
+use PHPUnit\Framework\MockObject\Rule\Parameters;
 
 trait AuthenticatesUsers
 {
@@ -32,8 +35,16 @@ trait AuthenticatesUsers
     public function login(Request $request)
     {
         $this->validateLogin($request);
+        
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        
+
+        // dd($request);
+        // $username = $request->get('username');
+        // dd($username);
+        
+
+   // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
@@ -48,6 +59,85 @@ trait AuthenticatesUsers
                 $request->session()->put('auth.password_confirmed_at', time());
             }
 
+            $user = Auth::user(); 
+            $apiToken = session('api_token');
+            
+            // Ensure API token exists
+            if (!$apiToken) {
+                return back()->withErrors([
+                    'username' => 'API token is required.',
+                ]);
+            }
+        
+            if ($user->role === "student") {
+                // Assuming 'nim' is a valid attribute in the 'users' table, if not, adjust accordingly
+            
+                $headers = [
+                    'Authorization' => 'Bearer ' . $apiToken,
+                ];
+        
+                
+
+                // Define the API URL correctly
+                $response = Http::withHeaders($headers)->withoutVerifying()
+                    ->get('https://cis-dev.del.ac.id/api/library-api/mahasiswa', [
+                    
+                        'username' => $user->username, // Send the username from authenticated user
+                    
+                    ]);
+            
+
+                $user_id = $response['data']['mahasiswa'][0]['user_id'];
+                Session::put('user_id', $user_id);
+
+            }
+
+            if ($user->role === "lecturer") {
+                // Assuming 'nim' is a valid attribute in the 'users' table, if not, adjust accordingly
+            
+                $headers = [
+                    'Authorization' => 'Bearer ' . $apiToken,
+                ];
+        
+                
+
+                // Define the API URL correctly
+                $response = Http::withHeaders($headers)->withoutVerifying()
+                    ->get('https://cis-dev.del.ac.id/api/library-api/mahasiswa', [
+                    
+                        'username' => $user->username, // Send the username from authenticated user
+                    
+                    ]);
+            
+
+                $user_id = $response['data']['mahasiswa'][0]['user_id'];
+                Session::put('user_id', $user_id);
+
+            }
+
+            if ($user->role === "coordinator") {
+                // Assuming 'nim' is a valid attribute in the 'users' table, if not, adjust accordingly
+            
+                $headers = [
+                    'Authorization' => 'Bearer ' . $apiToken,
+                ];
+        
+                
+
+                // Define the API URL correctly
+                $response = Http::withHeaders($headers)->withoutVerifying()
+                    ->get('https://cis-dev.del.ac.id/api/library-api/dosen?nama=Ius&nidn=&nip=&userid=&pegawaiid=&dosenid=&limit=', [
+                    
+                        'nip' => $user->username, // Send the username from authenticated user
+                    
+                    ]);
+            
+
+                $user_id = $response['data']['dosen'][0]['user_id'];
+                Session::put('user_id', $user_id);
+
+            }            
+            
             return $this->sendLoginResponse($request);
         }
 

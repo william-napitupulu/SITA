@@ -10,11 +10,11 @@ use Carbon\Carbon;
 
 class HomeController extends Controller
 {
-    public function __construct()
-    {
-        // Disable the auth middleware if it's no longer needed
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     // Disable the auth middleware if it's no longer needed
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.

@@ -2,64 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Eligibility;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EligibilityController extends Controller
 {
-
-    public function index()
+    public function showForm(Request $request)
     {
-        // Fetch users with eligibility information
-        $eligibilities = Eligibility::with('user')->get();
-        return view('coordinator.approveEligibility', compact('eligibilities'));
+        // Find the eligibility form for the current student (based on their ID number)
+        $eligibility = Eligibility::where('id_number', $request->id_number)->first();
+
+
+        // Clear the session flag if the page is refreshed
+        if (session()->has('rejected_shown')) {
+            session()->forget('rejected_shown');
+        }
+
+        // Pass the eligibility data to the view
+        return view('student.eligibility', compact('eligibility'));
     }
 
+    
 
-    public function showForm()
-    {
-        
-        return view('student.eligibility');
-    }
 
     public function submitForm(Request $request)
     {
-        // Handle the form submission logic, like validating and saving data
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'id_number' => 'required|string|max:20',
-            'email' => 'required|email',
-            'date_of_birth' => 'required|date',
-            // Add other fields validation
+        // Check if the student has already submitted the form and is in 'waiting' state
+        $existingEligibility = Eligibility::where('id_number', $request->id_number)->first();
+
+        if ($existingEligibility && $existingEligibility->eligibility_status == 'waiting') {
+            return redirect()->route('student.eligibility')->with('error', 'You have already submitted your eligibility form and are waiting for approval.');
+        }
+
+
+
+        // Validate the form
+        $validated = [
+            'name' => 'John Doe',
+            'id_number' => '12345',
+            'email' => 'john@example.com',
+            'date_of_birth' => '2000-01-01',
+            'phone_number' => '123456789',
+            'eligibility_status' => 'eligible',
+            'criteria' => ['criteria_1', 'criteria_2'],
+            'comments' => 'Test comment',
+        ];
+    
+        
+
+        // Store the eligibility form data with the status as 'waiting'
+        $eligibility = Eligibility::create([
+            'name' => $validated['name'],
+            'id_number' => $validated['id_number'],
+            'email' => $validated['email'],
+            'date_of_birth' => $validated['date_of_birth'],
+            'phone_number' => $validated['phone_number'],
+            'eligibility_status' => 'waiting', // Set the status to 'waiting' by default
+            'comments' => $request->input('comments', null),
+            'criteria' => json_encode($validated['criteria']),
         ]);
 
-        // Process the data, e.g., save to database or send email
-        // For now, just return a success message
-        return redirect()->route('eligibility.form')->with('success', 'Form submitted successfully!');
+        // Redirect back with success message
+        return redirect()->route('student.eligibility')->with('success', 'Eligibility form submitted successfully. You are now in a pending state.');
     }
 
-    public function approve($id)
-    {
-        // Approve eligibility for a user
-        $eligibility = Eligibility::find($id);
-        if ($eligibility) {
-            $eligibility->is_eligible = true;
-            $eligibility->save();
-            return redirect()->route('eligibility.index')->with('success', 'Eligibility Approved');
-        }
-        return redirect()->route('eligibility.index')->with('error', 'Eligibility not found');
-    }
-
-    public function disapprove($id)
-    {
-        // Disapprove eligibility for a user
-        $eligibility = Eligibility::find($id);
-        if ($eligibility) {
-            $eligibility->is_eligible = false;
-            $eligibility->save();
-            return redirect()->route('eligibility.index')->with('success', 'Eligibility Disapproved');
-        }
-        return redirect()->route('eligibility.index')->with('error', 'Eligibility not found');
-    }
 }

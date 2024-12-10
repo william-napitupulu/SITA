@@ -9,12 +9,15 @@ class Eligibility extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'is_eligible'];
-
-    // Optional: Add any relationships if needed
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = [
+        'name',
+        'id_number',
+        'email',
+        'date_of_birth',
+        'phone_number',
+        'eligibility_status',
+        'comments',
+        'criteria', // This will store the criteria as a JSON field
+    ];
 }
 

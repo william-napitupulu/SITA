@@ -12,6 +12,7 @@ use App\Http\Controllers\EligibilityController;
 use App\Http\Controllers\ThesisHandbookController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AssignStudentController;
+use App\Http\Controllers\RequestController;
 
 
 
@@ -27,10 +28,10 @@ Route::post('login', [LoginController::class, 'login'])->name('login.submit');
 // Authenticated Routes (protected by middleware)
 Route::middleware('auth')->group(function () {
 
-        // Default Home Route (or dashboard)
+    // Default Home Route (or dashboard)
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-
+        
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
@@ -42,10 +43,14 @@ Route::middleware('auth')->group(function () {
 
     // Eligibility Routes
     Route::get('/eligibility', [EligibilityController::class, 'showForm'])->name('eligibilityForm');
-    Route::post('/eligibility', [EligibilityController::class, 'submitForm'])->name('eligibility.submit');
-    Route::get('/eligibility-approve', [EligibilityController::class, 'index'])->name('eligibility');
-    Route::post('/eligibility/approve/{id}', [EligibilityController::class, 'approve'])->name('eligibility.approve');
-    Route::post('/eligibility/disapprove/{id}', [EligibilityController::class, 'disapprove'])->name('eligibility.disapprove');
+
+    Route::get('/eligibility/create', [RequestController::class, 'create'])->name('request.create');
+    Route::post('/eligibility/store', [RequestController::class, 'store'])->name('request.store');
+
+        Route::get('/eligibility-approve', [RequestController::class, 'index'])->name('request.index');
+        Route::post('/eligibility/approve/{id}', [RequestController::class, 'approve'])->name('request.approve');
+        Route::post('/eligibility/reject/{id}', [RequestController::class, 'reject'])->name('request.reject');
+    
 
 
     // Thesis Handbook Route
@@ -63,13 +68,13 @@ Route::middleware('auth')->group(function () {
         $filePath = public_path('storage/files/06._Pedoman_Seminar_Proposal_S1IF.pdf');
         return response()->download($filePath);
     });
-   // Student specific routes
-   Route::get('/student/dashboard', [UserController::class, 'index'])->middleware('can:isStudent');
+//    // Student specific routes
+//    Route::get('/student/dashboard', [UserController::class, 'index'])->middleware('can:isStudent');
     
-   // Lecturer specific routes
-   Route::get('/lecturer/dashboard', [UserController::class, 'index'])->middleware('can:isLecturerOrCoordinator');
+//    // Lecturer specific routes
+//    Route::get('/lecturer/dashboard', [UserController::class, 'index'])->middleware('can:isLecturerOrCoordinator');
    
-   // Coordinator specific routes
-   Route::get('/coordinator/dashboard', [UserController::class, 'index'])->middleware('can:isCoordinator');
+//    // Coordinator specific routes
+//    Route::get('/coordinator/dashboard', [UserController::class, 'index'])->middleware('can:isCoordinator');
 
 });
