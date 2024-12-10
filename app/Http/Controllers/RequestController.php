@@ -27,17 +27,23 @@ class RequestController extends Controller
         $existingRequest = Request::where('user_id', Auth::id())->where('status', 'pending')->first();
         if ($existingRequest) {
             return back()->with('error', 'You already have a pending request.');
+        } else {
+            // Change the user's status to "Pending"
+            $user = Auth::user();
+            $user->status = 'Pending';
+            $user->save();
         }
 
-        // Create a new request
-        Request::create([
-            'user_id' => Auth::id(),
-            'criteria' => $validated['criteria'],
-            'status' => 'pending',
-        ]);
+    // Create a new request
+    Request::create([
+        'user_id' => Auth::id(),
+        'criteria' => $validated['criteria'],
+        'status' => 'pending',
+    ]);
 
-        return back()->with('success', 'Your request has been submitted.');
-    }
+    return back()->with('success', 'Your request has been submitted.');
+}
+
 
     // Display requests for coordinators
     public function index()
@@ -50,7 +56,17 @@ class RequestController extends Controller
     public function approve($id)
     {
         $request = Request::findOrFail($id);
+        
+        // Update the request status
         $request->update(['status' => 'approved']);
+        
+        // Update the user's status to 'Approved'
+        $user = $request->user;
+        if ($user) {
+            $user->status = 'Approved';
+            $user->save();
+        }
+
         return back()->with('success', 'Request approved.');
     }
 
@@ -58,10 +74,21 @@ class RequestController extends Controller
     public function reject(HttpRequest $request, $id)
     {
         $requestData = Request::findOrFail($id);
+        
+        // Update the request status and add review comments
         $requestData->update([
             'status' => 'rejected',
             'review_comments' => $request->input('comments'),
         ]);
+
+        // Update the user's status to 'Rejected'
+        $user = $requestData->user;
+        if ($user) {
+            $user->status = 'Rejected';
+            $user->save();
+        }
+
         return back()->with('success', 'Request rejected.');
     }
+
 }

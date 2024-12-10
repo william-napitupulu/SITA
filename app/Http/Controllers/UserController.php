@@ -24,6 +24,7 @@ class UserController extends Controller
             'username' => 'required|string|unique:users',
             'role' => 'required',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required',
         ]);
 
         $data = $request->only('name', 'username', 'role');

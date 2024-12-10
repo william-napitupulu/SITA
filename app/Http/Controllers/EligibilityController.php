@@ -5,22 +5,47 @@ namespace App\Http\Controllers;
 use App\Models\Eligibility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
 
 class EligibilityController extends Controller
 {
     public function showForm(Request $request)
     {
-        // Find the eligibility form for the current student (based on their ID number)
+        Log::info('Request ID Number: ' . $request->id_number);
         $eligibility = Eligibility::where('id_number', $request->id_number)->first();
 
+        Log::info('Eligibility Data: ' . ($eligibility ? $eligibility->toJson() : 'No data found'));
 
-        // Clear the session flag if the page is refreshed
         if (session()->has('rejected_shown')) {
             session()->forget('rejected_shown');
         }
 
-        // Pass the eligibility data to the view
         return view('student.eligibility', compact('eligibility'));
+    }
+
+
+    public function updateStatus(Request $request)
+    {
+        $user = Auth::user();
+        $user->status = 'Not Approved'; // Update the status value
+        $user->save(); // Save the changes to the database
+
+        return back()->with('success', 'Status updated successfully.');
+    }
+    public function resetForm()
+    {
+        $user = Auth::user();
+        dd($user);
+        
+        if ($user->status === 'Rejected') {
+            
+            // Update status to "Not Approved"
+            $user->update(['status' => 'Not Approved']);
+        }
+
+
+        return view('student.eligibility');
     }
 
     

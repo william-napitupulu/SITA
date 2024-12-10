@@ -43,13 +43,17 @@ Route::middleware('auth')->group(function () {
 
     // Eligibility Routes
     Route::get('/eligibility', [EligibilityController::class, 'showForm'])->name('eligibilityForm');
+    Route::post('/reset-form', [EligibilityController::class, 'resetForm'])->name('reset.form');
+    Route::get('/update-status', [EligibilityController::class, 'updateStatus'])->name('update.status');
 
+    
     Route::get('/eligibility/create', [RequestController::class, 'create'])->name('request.create');
     Route::post('/eligibility/store', [RequestController::class, 'store'])->name('request.store');
 
-        Route::get('/eligibility-approve', [RequestController::class, 'index'])->name('request.index');
-        Route::post('/eligibility/approve/{id}', [RequestController::class, 'approve'])->name('request.approve');
-        Route::post('/eligibility/reject/{id}', [RequestController::class, 'reject'])->name('request.reject');
+
+    Route::get('/eligibility-approve', [RequestController::class, 'index'])->name('request.index');
+    Route::post('/eligibility/approve/{id}', [RequestController::class, 'approve'])->name('request.approve');
+    Route::post('/eligibility/reject/{id}', [RequestController::class, 'reject'])->name('request.reject');
     
 
 

@@ -17,6 +17,8 @@ class UsersTableSeeder extends Seeder
             'username' => 'ifs20006',
             'password' => Hash::make('student'),
             'role' => 'student',
+            'status' => 'Not Approved'
+
         ]);
 
         // Create lecturers
@@ -25,6 +27,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'ifs20022',
             'password' => Hash::make('lecturer'),
             'role' => 'lecturer',
+            'status' => ''
         ]);
 
         // Create coordinators
@@ -33,6 +36,7 @@ class UsersTableSeeder extends Seeder
             'username' => '0308190348',
             'password' => Hash::make('coordinator'),
             'role' => 'coordinator',
+            'status' => ''
         ]);
     }
 }
