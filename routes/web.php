@@ -66,7 +66,9 @@ Route::middleware('auth')->group(function () {
 
 
     // Asign Student Routes
-    Route::get('assign-student', [AssignStudentController::class, 'index'])->name('assign.student');
+    Route::get('/assign-students', [AssignStudentController::class, 'index'])->name('assign.students');
+    Route::post('/assign-students', [AssignStudentController::class, 'assign'])->name('assign.students.submit');
+
 
     Route::get('download-pdf', function () {
         $filePath = public_path('storage/files/06._Pedoman_Seminar_Proposal_S1IF.pdf');

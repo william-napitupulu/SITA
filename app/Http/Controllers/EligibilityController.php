@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Eligibility;
+use App\Models\UserRequest;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -13,16 +14,24 @@ class EligibilityController extends Controller
     public function showForm(Request $request)
     {
         Log::info('Request ID Number: ' . $request->id_number);
-        $eligibility = Eligibility::where('id_number', $request->id_number)->first();
+        
+        $eligibility = UserRequest::where('user_id', session('user_id'))->first();
 
-        Log::info('Eligibility Data: ' . ($eligibility ? $eligibility->toJson() : 'No data found'));
-
+        $requestCriteria = null;
+        if ($eligibility) {
+            // Split the comma-separated string into an array
+            $requestCriteria = explode(',', $eligibility['criteria']);
+        }
+        
+        // Check if the 'rejected_shown' session key exists, and forget it if it does
         if (session()->has('rejected_shown')) {
             session()->forget('rejected_shown');
         }
 
-        return view('student.eligibility', compact('eligibility'));
+        // Pass the array to the Blade view
+        return view('student.eligibility', compact('requestCriteria'));
     }
+
 
 
     public function updateStatus(Request $request)
@@ -49,47 +58,5 @@ class EligibilityController extends Controller
     }
 
     
-
-
-    public function submitForm(Request $request)
-    {
-        // Check if the student has already submitted the form and is in 'waiting' state
-        $existingEligibility = Eligibility::where('id_number', $request->id_number)->first();
-
-        if ($existingEligibility && $existingEligibility->eligibility_status == 'waiting') {
-            return redirect()->route('student.eligibility')->with('error', 'You have already submitted your eligibility form and are waiting for approval.');
-        }
-
-
-
-        // Validate the form
-        $validated = [
-            'name' => 'John Doe',
-            'id_number' => '12345',
-            'email' => 'john@example.com',
-            'date_of_birth' => '2000-01-01',
-            'phone_number' => '123456789',
-            'eligibility_status' => 'eligible',
-            'criteria' => ['criteria_1', 'criteria_2'],
-            'comments' => 'Test comment',
-        ];
-    
-        
-
-        // Store the eligibility form data with the status as 'waiting'
-        $eligibility = Eligibility::create([
-            'name' => $validated['name'],
-            'id_number' => $validated['id_number'],
-            'email' => $validated['email'],
-            'date_of_birth' => $validated['date_of_birth'],
-            'phone_number' => $validated['phone_number'],
-            'eligibility_status' => 'waiting', // Set the status to 'waiting' by default
-            'comments' => $request->input('comments', null),
-            'criteria' => json_encode($validated['criteria']),
-        ]);
-
-        // Redirect back with success message
-        return redirect()->route('student.eligibility')->with('success', 'Eligibility form submitted successfully. You are now in a pending state.');
-    }
 
 }

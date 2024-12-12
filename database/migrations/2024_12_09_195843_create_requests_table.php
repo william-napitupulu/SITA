@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('user_requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id'); // Foreign key for students
+            $table->unsignedBigInteger('request_id');
             $table->json('criteria'); // Store the selected checkboxes as JSON
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('review_comments')->nullable(); // Comments from the coordinator

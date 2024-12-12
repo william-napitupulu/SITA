@@ -375,7 +375,7 @@ return [
 
         [
             'text' => 'Assign Student',
-            'url' => 'assign-student',
+            'url' => 'assign-students',
             'can' => 'isCoordinator',
             'icon' => 'fas fa-users'
 

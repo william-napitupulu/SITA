@@ -43,6 +43,7 @@ class HomeController extends Controller
             'status' => 'Aktif', // Filter by active status
             'angkatan' => '2020',
         ]);
+
         
         // Fetch the data for active lecturers
         $lecturersResponse = Http::withHeaders($headers)->withoutVerifying()
