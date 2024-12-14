@@ -13,6 +13,8 @@ use App\Http\Controllers\ThesisHandbookController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AssignStudentController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\AcademicYearController;
+
 
 
 
@@ -68,6 +70,9 @@ Route::middleware('auth')->group(function () {
     // Asign Student Routes
     Route::get('/assign-students', [AssignStudentController::class, 'index'])->name('assign.students');
     Route::post('/assign-students', [AssignStudentController::class, 'assign'])->name('assign.students.submit');
+
+    Route::get('academic-year', [AcademicYearController::class, 'index'])->name('lecturer.academicYear');
+
 
 
     Route::get('download-pdf', function () {
