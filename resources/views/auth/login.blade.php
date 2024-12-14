@@ -164,7 +164,6 @@
             <h1>SITA</h1>
         </div>
         <div class="login-form">
-            <!-- Tulisan lebih dekat ke SITA -->
             <h2>Sign in to your account</h2>
 
             <form action="{{ route('login.submit') }}" method="POST">
@@ -180,7 +179,7 @@
                 <div class="form-group">
                     <span class="input-icon">🔑</span>
                     <input type="password" name="password" id="password" placeholder="Password" required>
-                    <span class="toggle-password">👁️</span>
+                    <span class="toggle-password" onclick="togglePassword()">👁️</span>
                     @error('password')
                     <div class="error">{{ $message }}</div>
                     @enderror
@@ -195,5 +194,21 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+            const isPasswordVisible = passwordInput.getAttribute('type') === 'text';
+
+            if (isPasswordVisible) {
+                passwordInput.setAttribute('type', 'password');
+                toggleIcon.textContent = '👁️'; // Change icon back to "closed eye"
+            } else {
+                passwordInput.setAttribute('type', 'text');
+                toggleIcon.textContent = '🙈'; // Change icon to "open eye"
+            }
+        }
+    </script>
 </body>
 </html>
