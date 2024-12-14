@@ -71,8 +71,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/assign-students', [AssignStudentController::class, 'index'])->name('assign.students');
     Route::post('/assign-students', [AssignStudentController::class, 'assign'])->name('assign.students.submit');
 
-    Route::get('academic-year', [AcademicYearController::class, 'index'])->name('lecturer.academicYear');
 
+    Route::get('/academic-years', [AcademicYearController::class, 'index'])->name('academic.years');
+    // Route to show details for a specific year
+    Route::get('/academic-years/{year}', [AcademicYearController::class, 'details'])->name('academic.years.details');
 
 
     Route::get('download-pdf', function () {

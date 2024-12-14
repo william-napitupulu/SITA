@@ -50,6 +50,11 @@ class HomeController extends Controller
         $lecturersResponse = Http::withHeaders($headers)->withoutVerifying()
         ->get('https://cis-dev.del.ac.id/api/library-api/dosen');
 
+        // If the API request fails, return a failure message
+        if (!$lecturersResponse->successful() || !$studentsResponse->successful()) {
+            
+            return redirect()->route('login')->withErrors('Unable to authenticate API.');
+        }
         // Get the count for active students and lecturers
         $activeStudentsCount = count($studentsResponse->json()['data']['mahasiswa']);
         $activeLecturersCount = count($lecturersResponse->json()['data']['dosen']);

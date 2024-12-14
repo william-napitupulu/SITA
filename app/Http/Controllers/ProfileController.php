@@ -13,13 +13,13 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user(); // Get the logged-in user
-        return view('profile', compact('user')); // Return the profile page
+        return view('app.profile', compact('user')); // Return the profile page
     }
 
     public function settings()
     {
         $user = Auth::user(); // Get the logged-in user
-        return view('settings', compact('user')); // Return the settings page
+        return view('app.settings', compact('user')); // Return the settings page
     }
 
     public function update(Request $request)

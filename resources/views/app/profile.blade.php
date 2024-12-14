@@ -1,3 +1,4 @@
+profile.blade:
 @extends('adminlte::page')
 
 @section('title', 'Profile')

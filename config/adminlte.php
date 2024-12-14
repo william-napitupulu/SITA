@@ -391,7 +391,7 @@ return [
 
         [
             'text' => 'Academic Year',
-            'url' => 'academic-year',
+            'url' => 'academic-years',
             'icon' => 'fas fa-calendar-alt',
             'can' => 'isLecturerOrCoordinator'
             
