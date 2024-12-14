@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('student_id'); // Reference to users table (students)
             $table->unsignedBigInteger('supervisor_id')->nullable(); // Reference to users table (supervisors)
+            $table->string('batch')->nullable(); 
+            $table->string('nim')->nullable(); 
             $table->string('group')->nullable(); // Group assignment
+
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');

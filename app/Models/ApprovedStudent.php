@@ -9,7 +9,7 @@ class ApprovedStudent extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['student_id', 'supervisor_id', 'group'];
+    protected $fillable = ['student_id', 'supervisor_id', 'name' ,'batch', 'nim', 'group'];
 
     // Relationship to fetch the student details
     public function student()

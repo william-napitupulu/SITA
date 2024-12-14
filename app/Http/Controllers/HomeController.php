@@ -37,6 +37,7 @@ class HomeController extends Controller
             'Authorization' => 'Bearer ' . $apiToken,
         ];
 
+
         // Fetch the data for active students (filtered by status "Aktif" and year 2020)
         $studentsResponse = Http::withHeaders($headers)->withoutVerifying()
         ->get('https://cis-dev.del.ac.id/api/library-api/mahasiswa', [

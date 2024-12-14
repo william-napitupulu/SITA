@@ -12,7 +12,7 @@ class AssignStudentController extends Controller
     public function index()
     {
         // Fetch approved students with their associated supervisors and groups
-        $students = ApprovedStudent::with('student', 'supervisor')->get();
+        $students = ApprovedStudent::all();
 
         // Fetch all supervisors (assuming supervisors are identified by their role)
         $supervisors = User::where('role', 'lecturer')->get();
@@ -23,28 +23,33 @@ class AssignStudentController extends Controller
     // Handle assigning students to supervisors and groups
     public function assign(Request $request)
     {
-        // Validate the incoming request
         $request->validate([
-            'supervisor_id' => 'required|exists:users,id',  // Supervisor must exist in the users table
-            'students' => 'required|array|min:1|max:3',    // Must select between 1 and 3 students
-            'students.*' => 'exists:approved_students,student_id', // Validate that each student exists in the approved_students table
+            'supervisor_id' => 'required|exists:users,id',
+            'students' => 'required|array|min:1|max:3',    // Maximum of 3 students
+            'students.*' => 'exists:approved_students,student_id',
+            'groups' => 'array', 
+            'groups.*' => 'nullable|string|max:255', // Validate each group name
         ]);
 
         $supervisorId = $request->input('supervisor_id');
         $studentIds = $request->input('students');
+        $groups = $request->input('groups', []);
 
         foreach ($studentIds as $studentId) {
             $approvedStudent = ApprovedStudent::where('student_id', $studentId)->first();
 
             if ($approvedStudent) {
                 $approvedStudent->update([
+                    
                     'supervisor_id' => $supervisorId,
-                    'group' => 'Group ' . ($approvedStudent->group ?? rand(1, 5)), // Assign or retain group
+                    'group' => $groups[$studentId] ?? 'Group ' . rand(1, 5), // Use provided group or assign default
+                    
                 ]);
             }
         }
 
         return redirect()->route('assign.students')
-            ->with('success', 'Students assigned to supervisor successfully!');
+            ->with('success', 'Students and groups assigned successfully!');
     }
+
 }
