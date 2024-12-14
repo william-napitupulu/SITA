@@ -12,55 +12,54 @@
 @stop
 
 @section('content')
-
-<div class="d-flex justify-content-center align-items-center p-3 bg-white w-100">
-  <!-- Welcome to Sita Banner (Styled to match the image) -->
-  <div class="row justify-content-center mb-4 w-100">
-    <div class="col-md-12 text-center">
-      <div class="alert text-center">
-        <h2 class="d-inline-block align-middle ml-3">Welcome to Sita (Sistem Informasi Tugas Akhir) - FITE</h2>
+<div class="container bg-white p-4 mt-4 rounded shadow-sm">
+  <!-- Welcome Banner -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-12">
+      <div class="welcome-banner shadow rounded p-4 text-center">
+        <h2 class="welcome-title text-primary">Welcome to SITA (Sistem Informasi Tugas Akhir) - FITE</h2>
       </div>
     </div>
   </div>
-</div>
 
-<div class="container bg-white p-4 mt-4 rounded shadow-sm">
-
-  <div class="row justify-content-center mb-4">
+  <!-- Statistics Cards -->
+  <div class="row text-center mb-4">
     <!-- Active Students -->
-    <div class="col-md-4 col-sm-6 mb-3">
-      <div class="card text-center">
-        <div class="card-header text-black">
-          <h3 class="card-title">Active Students</h3>
+    <div class="col-md-6 col-sm-12 mb-3">
+      <div class="stat-card bg-blue text-white shadow-sm d-flex justify-content-between align-items-center p-3 rounded">
+        <div class="icon-container">
+          <i class="fas fa-id-badge fa-3x text-light-blue"></i>
         </div>
-        <div class="card-body">
-          <h4 class="mb-3">{{ $activeStudentsCount }}</h4> <!-- Display Active Students Count -->
+        <div class="stat-content text-right">
+          <h3 class="mb-0">{{ $activeStudentsCount }}</h3>
+          <p class="mb-0">Active Students</p>
         </div>
       </div>
     </div>
 
     <!-- Active Lecturers -->
-    <div class="col-md-4 col-sm-6 mb-3">
-      <div class="card text-center">
-        <div class="card-header text-black">
-          <h3 class="card-title">Active Lecturers</h3>
+    <div class="col-md-6 col-sm-12 mb-3">
+      <div class="stat-card bg-pink text-white shadow-sm d-flex justify-content-between align-items-center p-3 rounded">
+        <div class="icon-container">
+          <i class="fas fa-chalkboard-teacher fa-3x text-light-pink"></i>
         </div>
-        <div class="card-body">
-          <h4 class="mb-3">{{ $activeLecturersCount }}</h4> <!-- Display Active Lecturers Count -->
+        <div class="stat-content text-right">
+          <h3 class="mb-0">{{ $activeLecturersCount }}</h3>
+          <p class="mb-0">IT Del Lecturers</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Chart for Students Passed Each Year -->
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header text-black">
-          <h3 class="card-title text-center">Number of Graduates per Academic Year</h3>
+  <!-- Chart -->
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-light text-black">
+          <h5 class="card-title text-center">Number of Graduates per Academic Year</h5>
         </div>
-        <div class="card-body text-center">
-          <canvas id="studentsPassedChart"></canvas>
+        <div class="card-body">
+          <canvas id="studentsPassedChart" style="max-width: 100%; height: 300px;"></canvas>
         </div>
       </div>
     </div>
@@ -69,34 +68,59 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
-<style>  
-  #studentsPassedChart {
-    max-width: 100%;    /* Ensure the chart takes the full width of its parent container */
-    height: 350px;      /* Define the height of the chart */
-    margin: 0 auto;     /* Centers the chart horizontally */
-}
+<style>
+  /* Welcome Banner Styling */
+  .welcome-banner {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .welcome-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #007bff;
+    margin: 0;
+  }
 
-  .btn-primary {
+  /* Statistics Cards */
+  .stat-card {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 100px;
   }
-  .container {
-    max-width: 1200px;
+  .bg-blue {
+    background-color: #4285f4;
   }
-  .card-body h4 {
-    font-size: 2rem;
+  .text-light-blue {
+    color: #a7c7ff;
+  }
+  .bg-pink {
+    background-color: #f48fb1;
+  }
+  .text-light-pink {
+    color: #ffc1e3;
+  }
+
+  .stat-content h3 {
+    margin: 0;
+    font-size: 1.5rem;
     font-weight: bold;
   }
-  .card-header {
-    background-color: #f8f9fa;
+  .stat-content p {
+    margin: 0;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
   }
-  .card-body {
-    background-color: #ffffff;
-  }
-  .row.justify-content-center {
-    justify-content: center !important;
+
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
   }
 </style>
 @stop
@@ -104,14 +128,12 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Data passed from the controller
   const passingStudentsPerYear = @json($passingStudentsPerYear);
-  const yearData = Object.keys(passingStudentsPerYear);  // Get years (2013-2020)
-  const passedData = Object.values(passingStudentsPerYear);  // Get the student counts for each year
+  const yearData = Object.keys(passingStudentsPerYear);
+  const passedData = Object.values(passingStudentsPerYear);
 
-  // Initialize the Chart.js chart
   const ctx = document.getElementById('studentsPassedChart').getContext('2d');
-  const studentsPassedChart = new Chart(ctx, {
+  new Chart(ctx, {
     type: 'line',
     data: {
       labels: yearData,
@@ -120,22 +142,28 @@
         data: passedData,
         borderColor: '#007bff',
         fill: false,
-        tension: 0.1,
+        tension: 0.4,
+        borderWidth: 3,
       }]
     },
     options: {
       responsive: true,
+      plugins: {
+        legend: { display: true, position: 'top' },
+      },
       scales: {
         x: {
           title: {
             display: true,
-            text: 'Year'
+            text: 'Year',
+            font: { size: 14 },
           }
         },
         y: {
           title: {
             display: true,
-            text: 'Number of Students'
+            text: 'Number of Students',
+            font: { size: 14 },
           },
           beginAtZero: true
         }
