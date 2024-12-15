@@ -3,24 +3,40 @@
 @section('title', 'Student Data')
 
 @section('content_header')
-<div class="d-flex flex-column align-items-center p-3 bg-white w-100">
-    <h1 class="text-primary">Dashboard</h1>
-    <small class="text-muted">Overview of the application</small>
+<!-- Header Section -->
+<div class="d-flex justify-content-between align-items-center px-3 py-2">
+    <!-- Title Section -->
+    <h5 class="mb-0" style="color: #4a90e2; font-weight: bold; font-size: 1.5rem;">Student Data</h5>
+    
+    <!-- Breadcrumbs Section -->
+    <small class="breadcrumb mb-0 text-muted">
+        <a href="#" class="text-secondary">Home</a> > <span>Student Data</span>
+    </small>
+</div>
+
+<!-- Guidance Section -->
+<div class="px-3 py-2 mt-2" style="background-color: #4a90e2; color: white; border-radius: 5px;">
+    <p class="mb-0" style="font-size: 1rem;">Guidance Group with Supervising Lecturer</p>
 </div>
 @stop
 
 @section('content')
-<div class="container bg-white p-4 mt-4 rounded shadow-sm">
-    <!-- Dropdown for Supervisor Selection -->
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-6">
+<!-- Main Content -->
+<div class="container bg-white p-4 mt-3 rounded shadow-sm">
+    <!-- Supervisor Selection -->
+    <div class="row align-items-center">
+        <div class="col-md-3 text-end">
+            <label for="supervisorDropdown" class="form-label" style="font-weight: bold;">Select Supervisor:</label>
+        </div>
+        <div class="col-md-9">
             <select id="supervisorDropdown" class="form-control">
-                
+                <option value="" selected>Select Supervisor...</option>
+                <!-- Dynamic options will be populated here -->
             </select>
         </div>
     </div>
 
-    <!-- Table for Students (Initially Empty) -->
+    <!-- Placeholder for Student Data Table -->
     <div id="studentsTableContainer" class="mt-4"></div>
 </div>
 @stop
@@ -28,10 +44,51 @@
 @section('css')
 <link rel="stylesheet" href="/css/admin_custom.css">
 <style>
-    /* Optional: Add some spacing or styling here if needed */
+    /* Breadcrumb Styles */
+    .breadcrumb {
+        text-align: right;
+    }
+
+    .breadcrumb a {
+        text-decoration: none;
+        color: #6c757d;
+    }
+
+    .breadcrumb span {
+        font-weight: bold;
+    }
+
+    /* Rounded Style */
+    .rounded {
+        border-radius: 5px;
+    }
+
+    /* Form Styles */
     .form-control {
-        width: 100%;
-        max-width: 300px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    label {
+        display: inline-block;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    /* Title Alignment */
+    h5 {
+        font-size: 1.5rem; /* Larger font size for Student Data */
+    }
+
+    p {
+        font-size: 1rem; /* Standard font size for Guidance text */
+        margin-top: 5px;
+    }
+
+    .bg-primary {
+        background-color: #4a90e2 !important;
+        color: white;
     }
 </style>
 @stop
@@ -47,7 +104,7 @@
                 url: '/get-students/' + supervisorId,
                 method: 'GET',
                 success: function(response) {
-                    // Show the student data table
+                    // Update the student data table
                     $('#studentsTableContainer').html(response);
                 },
                 error: function() {
