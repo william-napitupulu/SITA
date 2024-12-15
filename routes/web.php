@@ -80,6 +80,12 @@ Route::middleware('auth')->group(function () {
         $filePath = public_path('storage/files/06._Pedoman_Seminar_Proposal_S1IF.pdf');
         return response()->download($filePath);
     });
+
+    Route::get('/thesis-handbook/download-ta', function () {
+        $filePath = public_path('storage/files/Buku Pedoman TA S1IF-draft-v3.pdf');
+        return response()->download($filePath);
+    })->name('thesis-handbook.download-ta');
+    
 //    // Student specific routes
 //    Route::get('/student/dashboard', [UserController::class, 'index'])->middleware('can:isStudent');
     

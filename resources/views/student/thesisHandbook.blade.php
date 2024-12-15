@@ -44,13 +44,18 @@
               target="_blank">
               <i class="fas fa-eye"></i> Preview
             </a>
-            <a href="{{ asset('storage/files/Buku Pedoman TA S1IF-draft-v3.pdf') }}" class="btn btn-download"
-              target="_blank">
+            <button class="btn btn-download" id="downloadBtn">
               <i class="fas fa-download"></i> Download
+            </button>
+
             </a>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="notification-popup" id="downloadSuccessBox" style="display: none;">
+      <i class="fas fa-check-circle"></i> File downloaded successfully!
     </div>
 
     <div class="col-12">
@@ -252,6 +257,25 @@
   margin-top: 20px;
 }
 
+.notification-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  font-family: 'Inter', sans-serif;
+}
+
+.notification-popup i {
+  color: #28a745;
+  margin-right: 10px;
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container-main {
@@ -268,5 +292,22 @@
 @section('js')
 <script>
 console.log('Thesis Handbook page loaded.');
+document.addEventListener('DOMContentLoaded', function() {
+  const downloadBtn = document.getElementById('downloadBtn');
+  const successBox = document.getElementById('downloadSuccessBox');
+
+  downloadBtn.addEventListener('click', function() {
+    // Trigger file download
+    window.location.href = "{{ route('thesis-handbook.download-ta') }}";
+
+    // Show the success notification box
+    successBox.style.display = 'block';
+
+    // Hide the notification box after 3 seconds
+    setTimeout(function() {
+      successBox.style.display = 'none';
+    }, 3000);
+  });
+});
 </script>
 @stop
