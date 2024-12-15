@@ -2,12 +2,28 @@
 
 @section('title', 'Thesis Handbook')
 
+
 @section('content_header')
+<!-- Full-width Header -->
+<div class="full-width-header bg-light shadow-sm p-3">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <h1 class="header-title thesis-header mb-0">Thesis Handbook</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Thesis Handbook</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- Box "Preview and Download Handbook" -->
 <div class="header-box bg-white p-3 shadow-sm rounded d-flex align-items-center">
   <i class="fas fa-book icon-style"></i>
-  <h1 class="header-title mb-0">Preview and Download Handbook</h1>
+  <h1 class="header-title preview-header mb-0">Preview and Download Handbook</h1>
 </div>
 @stop
+
 
 @section('content')
 <!-- Box Utama untuk Background -->
@@ -87,7 +103,7 @@
   box-sizing: border-box;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   margin-top: 6px !important;
-  min-height: calc(100vh - 180px) !important;
+
 }
 
 /* Header Box */
@@ -188,6 +204,52 @@
   flex-direction: row !important;
   justify-content: flex-start !important;
   align-items: center !important;
+}
+
+.full-width-header {
+  width: 100%;
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #d1d5da;
+  z-index: 10;
+  position: relative;
+}
+
+.full-width-header .thesis-header {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700 !important;
+  /* Ubah menjadi bold */
+  color: #0079C2;
+  /* Warna biru */
+  font-size: 1.8rem;
+  /* Ukuran font lebih besar */
+  margin-left: 0 !important;
+  /* Dekatkan ke kiri */
+  margin-right: 0;
+  /* Tidak ada jarak di kanan */
+}
+
+
+/* Preview and Download Handbook Header */
+.header-box .preview-header {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  /* Medium */
+  color: #5C5252;
+  /* Warna abu-abu */
+  font-size: 1.5rem;
+  /* Ukuran font standar */
+  margin: 0;
+}
+
+.container-fluid {
+  max-width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+
+.header-box {
+  margin-top: 20px;
 }
 
 /* Responsive Design */
