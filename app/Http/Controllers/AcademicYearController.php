@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ApprovedStudent;
+use App\Models\User;
+
 
 class AcademicYearController extends Controller
 {
@@ -11,23 +14,21 @@ class AcademicYearController extends Controller
     {
         // Example list of years
         $years = ['2017/2018', '2018/2019', '2019/2020', '2020/2021', '2021/2022', '2022/2023', '2023/2024', '2024/2025'];
-        return view('lecturer.academic-years', compact('years'));
+        $batches = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+        return view('lecturer.academic-years', compact('years', 'batches'));
     }
 
     // Display the details for a specific year
     public function details($year)
     {
-        // Example students data for the selected year
-        $filteredStudents = [
-            ['batch' => 2017, 'nim' => '11122001', 'name' => 'Andi Saputra', 'supervisor' => 'Dr. John Doe'],
-            ['batch' => 2017, 'nim' => '11122002', 'name' => 'Budi Santoso', 'supervisor' => 'Dr. Jane Smith'],
-            ['batch' => 2018, 'nim' => '11122003', 'name' => 'Citra Dewi', 'supervisor' => 'Dr. John Doe'],
-            ['batch' => 2018, 'nim' => '11122004', 'name' => 'Doni Pratama', 'supervisor' => 'Dr. Emily Brown'],
-        ];
         
+        $students = ApprovedStudent::where('batch', $year)->get();
+        // Fetch all supervisors (assuming supervisors are identified by their role)
+        $supervisors = User::where('role', 'lecturer')->get();
+
 
 
         // Filter students by year if necessary (replace this with your database query)
-        return view('lecturer.academic-years-details', compact('year', 'filteredStudents'));
+        return view('lecturer.academic-years-details', compact('year', 'students', 'supervisors'));
     }
 }

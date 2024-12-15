@@ -265,7 +265,7 @@ return [
     'dashboard_url' => 'dashboard',  // Root URL should point to your dashboard (the route you've defined in web.php)
     'logout_url' => 'logout',  // Matches your custom logout route
     'login_url' => 'login',  // Matches your custom login route
-    'profile_url' => 'profile',  // If you don't want to show a profile link in the sidebar, set this to false
+    'profile_url' => false,  // If you don't want to show a profile link in the sidebar, set this to false
     'register_url' => false,  // Since you're not using registration, set this to false
     'password_reset_url' => 'password/reset',  // Make sure this matches your reset route
     'password_email_url' => 'password/email',  // Make sure this matches your email route

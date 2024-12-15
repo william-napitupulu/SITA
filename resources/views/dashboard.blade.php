@@ -11,6 +11,8 @@
 </div>
 @stop
 
+
+
 @section('content')
 <div class="container bg-white p-4 mt-4 rounded shadow-sm">
   <!-- Welcome Banner -->
@@ -65,6 +67,8 @@
     </div>
   </div>
 </div>
+
+
 @stop
 
 @section('css')

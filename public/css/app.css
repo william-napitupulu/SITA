@@ -457,6 +457,14 @@ legend {
   padding: 0;
 }
 
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+.modal {
+  z-index: 1050 !important;
+}
+
+
 ol,
 ul,
 menu {
@@ -532,7 +540,7 @@ audio,
 iframe,
 embed,
 object {
-  display: block;
+  
   /* 1 */
   vertical-align: middle;
   /* 2 */

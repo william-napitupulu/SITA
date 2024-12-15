@@ -13,7 +13,12 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user(); // Get the logged-in user
-        return view('app.profile', compact('user')); // Return the profile page
+
+        // Pass a flag to trigger the modal when the page loads
+        return view('app.profile', [
+            'user' => $user,
+            'showModal' => true, // Pass this flag to the view
+        ]);
     }
 
     public function settings()
@@ -25,28 +30,10 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'current_password' => 'required|string',
-            'password' => 'nullable|string|min:8|confirmed',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = Auth::user();
-
-        // Check if the current password matches
-        if (!Hash::check($request->current_password, $user->password)) {
-            return redirect()->back()->withErrors(['current_password' => 'The current password is incorrect.']);
-        }
-
-        // Update user details
-        $user->name = $request->name;
-        $user->username = $request->username;
-
-        // Update password if a new one is provided
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-        }
 
         // Update profile photo if a new one is uploaded
         if ($request->hasFile('profile_photo')) {
@@ -62,6 +49,8 @@ class ProfileController extends Controller
 
         $user->save(); // Save updated user data
 
-        return redirect()->route('profile.settings')->with('status', 'Profile updated successfully!');
+        return response()->json(['success' => true, 'message' => 'Profile updated successfully!']);
     }
+
+
 }

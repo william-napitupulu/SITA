@@ -78,7 +78,7 @@ class RequestController extends Controller
                 ->get('https://cis-dev.del.ac.id/api/library-api/mahasiswa', [
                     'username' => $user->username,
                 ]);
-
+                
             if ($response->successful()) {
                 $studentData = $response->json()['data']['mahasiswa'][0];
                 ApprovedStudent::updateOrCreate(

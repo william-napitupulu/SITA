@@ -12,9 +12,12 @@
         </div>
         <div class="card-body">
             <ul class="list-group">
-                @foreach ($years as $year)
-                    <li class="list-group-item">
-                        <a href="{{ route('academic.years.details', ['year' => 2017]) }}">{{ $year }}</a>
+                @foreach ($years as $index => $year)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <!-- Link to year details -->
+                        <a href="{{ route('academic.years.details', ['year' => $batches[$index]]) }}">
+                            {{ $year }}
+                        </a>
                     </li>
                 @endforeach
             </ul>
