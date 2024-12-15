@@ -86,6 +86,11 @@ Route::middleware('auth')->group(function () {
         return response()->download($filePath);
     })->name('thesis-handbook.download-ta');
     
+    Route::get('download-seminar-proposal', function () {
+        $filePath = public_path('storage/files/06._Pedoman_Seminar_Proposal_S1IF.pdf');
+        return response()->download($filePath);
+    })->name('download.seminarProposal');
+    
 //    // Student specific routes
 //    Route::get('/student/dashboard', [UserController::class, 'index'])->middleware('can:isStudent');
     

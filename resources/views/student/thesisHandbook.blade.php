@@ -58,6 +58,11 @@
       <i class="fas fa-check-circle"></i> File downloaded successfully!
     </div>
 
+    <div id="downloadSuccessBox" style="display: none;" class="alert alert-success mt-3" role="alert">
+      <i class="fas fa-check-circle"></i> File successfully downloaded!
+    </div>
+
+
     <div class="col-12">
       <div class="card border-light shadow-sm rounded hover-card equal-box">
         <div class="card-body d-flex justify-content-between align-items-center px-4 py-3">
@@ -65,14 +70,15 @@
             <h5 class="mb-0 card-title">Buku Pedoman Seminar Proposal</h5>
           </div>
           <div class="button-container">
-            <a href="{{ asset('storage/files/Buku Pedoman Seminar Proposal.pdf') }}" class="btn btn-preview"
+            <a href="{{ asset('storage/files/06._Pedoman_Seminar_Proposal_S1IF.pdf') }}" class="btn btn-preview"
               target="_blank">
               <i class="fas fa-eye"></i> Preview
             </a>
-            <a href="{{ asset('storage/files/Buku Pedoman Seminar Proposal.pdf') }}" class="btn btn-download"
-              target="_blank">
+            <button id="downloadSeminarProposal" class="btn btn-download">
               <i class="fas fa-download"></i> Download
-            </a>
+            </button>
+
+
           </div>
         </div>
       </div>
@@ -275,6 +281,20 @@
   margin-right: 10px;
 }
 
+#downloadSuccessBox {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -307,6 +327,26 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
       successBox.style.display = 'none';
     }, 3000);
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const downloadSeminarProposalBtn = document.getElementById("downloadSeminarProposal");
+  const successBox = document.getElementById("downloadSuccessBox");
+
+  downloadSeminarProposalBtn.addEventListener("click", function() {
+    console.log("Seminar Proposal Download Triggered");
+
+    // Show the success notification box
+    successBox.style.display = "block";
+
+    // Hide the notification box after 3 seconds
+    setTimeout(function() {
+      successBox.style.display = "none";
+    }, 3000);
+
+    // Trigger the file download
+    window.location.href = "/download-seminar-proposal";
   });
 });
 </script>
