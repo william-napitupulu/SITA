@@ -78,11 +78,12 @@
         .form-group {
             margin-bottom: 15px;
             position: relative;
+            text-align: left;
         }
 
         .form-group input {
             width: 100%;
-            padding: 10px 35px;
+            padding: 10px 35px 10px 35px; /* Tambah padding agar ikon tidak menumpuk */
             font-size: 14px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -107,11 +108,18 @@
         .form-group .toggle-password {
             position: absolute;
             top: 50%;
-            right: 10px;
+            right: 10px; /* Posisi di ujung kanan */
             transform: translateY(-50%);
             font-size: 16px;
             cursor: pointer;
             color: #666;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 13px;
+            margin-bottom: 5px;
+            text-align: left;
         }
 
         .remember-checkbox {
@@ -168,21 +176,25 @@
 
             <form action="{{ route('login.submit') }}" method="POST">
                 @csrf
+
+                <!-- Error Message for Username -->
+                @error('username')
+                <div class="error-message">{{ $message }}</div>
+                @enderror
+
                 <div class="form-group">
                     <span class="input-icon">👤</span>
                     <input type="text" name="username" id="username" placeholder="Username" required value="{{ old('username') }}">
-                    @error('username')
-                    <div class="error">{{ $message }}</div>
-                    @enderror
                 </div>
+
+                <!-- Error Message for Password -->
+                @error('password')
+                <div class="error-message">{{ $message }}</div>
+                @enderror
 
                 <div class="form-group">
                     <span class="input-icon">🔑</span>
                     <input type="password" name="password" id="password" placeholder="Password" required>
-                    <span class="toggle-password" onclick="togglePassword()">👁️</span>
-                    @error('password')
-                    <div class="error">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div class="remember-checkbox">
@@ -201,13 +213,7 @@
             const toggleIcon = document.querySelector('.toggle-password');
             const isPasswordVisible = passwordInput.getAttribute('type') === 'text';
 
-            if (isPasswordVisible) {
-                passwordInput.setAttribute('type', 'password');
-                toggleIcon.textContent = '👁️'; // Change icon back to "closed eye"
-            } else {
-                passwordInput.setAttribute('type', 'text');
-                toggleIcon.textContent = '🙈'; // Change icon to "open eye"
-            }
+          
         }
     </script>
 </body>
