@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Student;
 
+use App\Models\ApprovedStudent;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -10,8 +12,15 @@ class StudentController extends Controller
 {
     public function index()
     {
-        
-        return view('lecturer.studentData');
+         // Fetch approved students with their associated supervisors and groups
+         $students = ApprovedStudent::all();
+
+         // Fetch all supervisors (assuming supervisors are identified by their role)
+         $supervisors = User::where('role', 'lecturer')->get();
+         
+    
+        return view('lecturer.studentData', compact('students', 'supervisors'));
+
     }
 
     public function getStudentsBySupervisor($supervisorId)

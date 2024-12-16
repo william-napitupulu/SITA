@@ -24,17 +24,53 @@
 <!-- Main Content -->
 <div class="container bg-white p-4 mt-3 rounded shadow-sm">
     <!-- Supervisor Selection -->
-    <div class="row align-items-center">
-        <div class="col-md-3 text-end">
-            <label for="supervisorDropdown" class="form-label" style="font-weight: bold;">Select Supervisor:</label>
-        </div>
-        <div class="col-md-9">
-            <select id="supervisorDropdown" class="form-control">
-                <option value="" selected>Select Supervisor...</option>
-                <!-- Dynamic options will be populated here -->
+    <form id="assignForm" method="POST" action="{{ route('assign.students.submit') }}">
+        @csrf
+        <div class="mb-3">
+            <label for="supervisorSelect" class="form-label"><strong>Select Supervisor:</strong></label>
+            <select id="supervisorSelect" name="supervisor_id" class="form-select" required>
+                <option value="">Select Supervisor...</option>
+                @foreach($supervisors as $supervisor)
+                    <option value="{{ $supervisor->id }}">{{ $supervisor->name }}</option>
+                @endforeach
             </select>
         </div>
-    </div>
+
+     <!-- Table of Students -->
+     <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Batch</th>
+                        <th>NIM</th>
+                        <th>Student Name</th>
+                        <th>Supervisor</th>
+                        <th>Group</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($students as $key => $student)
+                        <tr>
+                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $student->batch ?? '-' }}</td>
+                            <td>{{ $student->nim ?? '-' }}</td>
+                            <td>{{ $student->student->name ?? '-' }}</td>
+                            <td>{{ $student->supervisor->name ?? '-' }}</td>
+                            <td>
+                                <input type="text" name="groups[{{ $student->student_id }}]" 
+                                       value="{{ $student->group ?? '' }}" 
+                                       class="form-control">
+                            </td>
+                            <td class="text-center">
+                                
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
     <!-- Placeholder for Student Data Table -->
     <div id="studentsTableContainer" class="mt-4"></div>
