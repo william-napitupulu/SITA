@@ -2,11 +2,11 @@
 
 @section('title', 'Student Data')
 
+
 @section('content_header')
-<!-- Header Section -->
-<div class="d-flex justify-content-between align-items-center px-3 py-2">
+<div class="p-3 bg-white w-100 d-flex justify-content-between align-items-center">
     <!-- Title Section -->
-    <h5 class="mb-0" style="color: #4a90e2; font-weight: bold; font-size: 1.5rem;">Student Data</h5>
+    <h1 class="text-primary font-weight-bold mb-0">Student Data</h1>
     
     <!-- Breadcrumbs Section -->
     <small class="breadcrumb mb-0 text-muted">
@@ -14,10 +14,12 @@
     </small>
 </div>
 
+
 <!-- Guidance Section -->
-<div class="px-3 py-2 mt-2" style="background-color: #4a90e2; color: white; border-radius: 5px;">
-    <p class="mb-0" style="font-size: 1rem;">Guidance Group with Supervising Lecturer</p>
-</div>
+<div class="container-fluid mt-4">
+    <!-- Judul dengan Latar Biru -->
+    <h5 class="text-white p-3 rounded" style="background-color: #4285f4;">Guidance Group with Supervising Lecturer</h5>
+    
 @stop
 
 @section('content')

@@ -11,7 +11,7 @@
 @section('content')
 <div class="container-fluid mt-4">
     <!-- Judul dengan Latar Biru -->
-    <h2 class="text-white p-3 rounded" style="background-color: #4285f4;">Student Data</h2>
+    <h4 class="text-white p-3 rounded" style="background-color: #4285f4;">Student Data</h4>
     
     <!-- Tabel -->
     <div class="table-responsive">
