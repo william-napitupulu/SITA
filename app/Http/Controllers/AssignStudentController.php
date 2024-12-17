@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 use App\Models\ApprovedStudent;
 use App\Models\User;
 
@@ -23,35 +25,51 @@ class AssignStudentController extends Controller
     // Handle assigning students to supervisors and groups
     public function assign(Request $request)
     {
-        $request->validate([
-            'supervisor_id' => 'required|exists:users,id',
-            'students' => 'required|array|min:1|max:3',    // Maximum of 3 students
-            'students.*' => 'exists:approved_students,student_id',
-            'groups' => 'array', 
-            'groups.*' => 'nullable|string|max:255', // Validate each group name
-        ]);
+        // dd($request);
+
+        // $request->validate([
+        //     'students' => 'required|array|min:1|max:3',    // Maximum of 3 students
+        //     'students.*' => 'exists:approved_students,student_id',
+        //     'groups' => 'array', 
+        //     'groups.*' => 'nullable|string|max:255', // Validate each group name
+        // ]);
+
 
         $supervisorId = $request->input('supervisor_id');
         $studentIds = $request->input('students');
         $groups = $request->input('groups', []);
+        $value = Session::get('group_count'); 
 
+        // dd($groups);
         foreach ($studentIds as $studentId) {
-            $approvedStudent = ApprovedStudent::where('student_id', $studentId)->first();
+            $approvedStudent = ApprovedStudent::where('id', $studentId)->first();
 
             if ($approvedStudent) {
                 $approvedStudent->update([
                     
                     'supervisor_id' => $supervisorId,
-                    'group' => $groups[$studentId] ?? 'Group ' . rand(1, 5), // Use provided group or assign default
+                    'group' => $groups[$studentId] ?? 'Group ' . $value, // Use provided group or assign default
                     
                 ]);
-            }
+                Session::put('group_count', $value + 1);
+
+
+            } 
             
         }
 
         
 
         return redirect()->route('assign.students')->with('success', 'Students and groups assigned successfully!');
+    }
+
+    public function saveGroupNames(Request $request)
+    {
+        $groups = $request->input('groups', []);
+        foreach ($groups as $studentId => $groupName) {
+            ApprovedStudent::where('id', $studentId)->update(['group' => $groupName]);
+        }
+        return redirect()->back()->with('success', 'Group names saved successfully!');
     }
 
 }

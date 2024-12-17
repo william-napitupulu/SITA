@@ -37,9 +37,10 @@
                             @endforeach
                         </select>
                     </div>
-                    <!-- Assign Button -->
-                    <div class="d-flex justify-content-end flex-grow-1">
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-end gap-3">
                         <button type="button" id="assignButton" class="btn btn-success">Assign</button>
+                        <button type="button" id="saveGroupsButton" class="btn btn-primary">Save Group Names</button>
                     </div>
                 </div>
             </div>
@@ -71,9 +72,15 @@
                                 <td>{{ $student->student->name ?? '-' }}</td>
                                 <td>{{ $student->supervisor->name ?? '-' }}</td>
                                 <td>
-                                    <input type="text" name="groups[{{ $student->id }}]" 
-                                           value="{{ $student->group ?? '' }}" 
-                                           class="form-control">
+                                    @if(!empty($student->supervisor))
+                                        <!-- Editable group input -->
+                                        <input type="text" name="groups[{{ $student->id }}]" 
+                                               value="{{ $student->group ?? 'Group 1' }}" 
+                                               class="form-control group-input">
+                                    @else
+                                        <!-- Display group name when not assigned -->
+                                        {{ $student->group ?? '-' }}
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <input type="checkbox" class="form-check-input student-checkbox" name="students[]" value="{{ $student->id }}">
@@ -85,45 +92,31 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="mt-5 text-center bg-light p-3">
-        <p class="text-muted">
-            Sistem Informasi Tugas Akhir (SITA) Copyright © Developed by Group 6. All rights reserved.
-        </p>
-        <p class="text-muted">Version 1.0</p>
-    </footer>
 </div>
 
-<!-- Confirmation Modal -->
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+<!-- Modals Section -->
+<div class="modal fade" id="confirmationModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center">
-            <div class="modal-header bg-white border-0">
-                <h5 class="modal-title fw-bold" id="confirmationModalLabel" style="font-size: 1.2rem;">
-                    <i class="fa fa-exclamation-circle text-warning me-2" style="font-size: 1.5rem;"></i>
-                    Confirmation Required !
-                </h5>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-exclamation-circle text-warning me-2"></i> Confirmation Required</h5>
             </div>
             <div class="modal-body">
-                <p class="mb-4" style="font-size: 1rem;">Are you sure you want to assign this supervisor?</p>
-                <div class="d-flex justify-content-center gap-3">
-                    <button type="button" id="confirmAssign" class="btn btn-success" style="width: 80px;">Yes</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 80px;">Cancel</button>
-                </div>
+                Are you sure you want to assign these students?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirmAssign" class="btn btn-success">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
 </div>
 
-
-<!-- Supervisor Not Selected Modal -->
-<div class="modal fade" id="noSupervisorModal" tabindex="-1" aria-labelledby="noSupervisorModalLabel" aria-hidden="true">
+<div class="modal fade" id="noSupervisorModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="noSupervisorModalLabel"><i class="fa fa-exclamation-triangle me-2"></i> Error</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Error</h5>
             </div>
             <div class="modal-body">
                 Please select a supervisor before assigning students!
@@ -135,13 +128,11 @@
     </div>
 </div>
 
-<!-- Max Students Exceeded Modal -->
-<div class="modal fade" id="maxStudentsModal" tabindex="-1" aria-labelledby="maxStudentsModalLabel" aria-hidden="true">
+<div class="modal fade" id="maxStudentsModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="maxStudentsModalLabel"><i class="fa fa-exclamation-triangle me-2"></i> Warning</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Warning</h5>
             </div>
             <div class="modal-body">
                 You can only assign a maximum of 3 students to a supervisor!
@@ -157,15 +148,15 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const assignButton = document.getElementById('assignButton');
+        const saveGroupsButton = document.getElementById('saveGroupsButton');
         const supervisorSelect = document.getElementById('supervisorSelect');
         const checkboxes = document.querySelectorAll('.student-checkbox');
 
         const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         const noSupervisorModal = new bootstrap.Modal(document.getElementById('noSupervisorModal'));
         const maxStudentsModal = new bootstrap.Modal(document.getElementById('maxStudentsModal'));
-
         const confirmAssign = document.getElementById('confirmAssign');
-        
+
         assignButton.addEventListener('click', function () {
             const selectedSupervisor = supervisorSelect.value;
             const selectedStudents = Array.from(checkboxes).filter(cb => cb.checked);
@@ -181,20 +172,30 @@
             }
 
             confirmationModal.show();
-
             confirmAssign.onclick = function () {
-                // Logic to submit the form
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '{{ route("assign.students.submit") }}';
-                form.innerHTML = `
-                    @csrf
-                    <input type="hidden" name="supervisor_id" value="${selectedSupervisor}">
-                    ${selectedStudents.map(student => `<input type="hidden" name="students[]" value="${student.value}">`).join('')}
-                `;
+                form.innerHTML = `@csrf<input type="hidden" name="supervisor_id" value="${selectedSupervisor}">
+                    ${selectedStudents.map(student => `<input type="hidden" name="students[]" value="${student.value}">`).join('')}`;
                 document.body.appendChild(form);
                 form.submit();
             };
+        });
+
+        saveGroupsButton.addEventListener('click', function () {
+            const groupInputs = document.querySelectorAll('.group-input');
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("save.group.names") }}';
+            form.innerHTML = `@csrf`;
+            groupInputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    form.innerHTML += `<input type="hidden" name="groups[${input.name.split('[')[1].split(']')[0]}]" value="${input.value}">`;
+                }
+            });
+            document.body.appendChild(form);
+            form.submit();
         });
     });
 </script>

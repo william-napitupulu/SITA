@@ -56,6 +56,7 @@ class RequestController extends Controller
     public function index()
     {
         $requests = UserRequest::with('user')->get();
+        // dd($requests);
         return view('coordinator.approveEligibility', compact('requests'));
     }
 

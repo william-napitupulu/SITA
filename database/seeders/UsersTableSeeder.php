@@ -10,9 +10,6 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        
-      
-
         User::create([
             'name' => 'Aditya Pratama Gultom',
             'username' => 'ifs20007',
@@ -22,7 +19,7 @@ class UsersTableSeeder extends Seeder
 
         ]);
 
-        User::create([-
+        User::create([
             'name' => 'Amelia Agustina Hutajulu',
             'username' => 'ifs20044',
             'password' => Hash::make('student'),

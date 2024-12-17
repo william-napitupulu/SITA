@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
     // Asign Student Routes
     Route::get('/assign-students', [AssignStudentController::class, 'index'])->name('assign.students');
     Route::post('/assign-students', [AssignStudentController::class, 'assign'])->name('assign.students.submit');
+    Route::post('/save-group-names', [AssignStudentController::class, 'saveGroupNames'])->name('save.group.names');
 
 
     Route::get('/academic-years', [AcademicYearController::class, 'index'])->name('academic.years');

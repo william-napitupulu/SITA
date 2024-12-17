@@ -37,7 +37,7 @@ class EligibilityController extends Controller
     public function updateStatus(Request $request)
     {
         $user = Auth::user();
-        $user->status = 'Not Approved'; // Update the status value
+        UserRequest::where('request_id', session('user_id'))->delete();        $user->status = 'Not Approved'; // Update the status value
         $user->save(); // Save the changes to the database
 
         return back()->with('success', 'Status updated successfully.');
@@ -46,20 +46,17 @@ class EligibilityController extends Controller
     public function resetForm()
     {
         $user = Auth::user();
-        dd($user);
         
         if ($user->status === 'Rejected') {
             
             // Update status to "Not Approved"
             $user->update(['status' => 'Not Approved']);
         }
-
-        
+        dd(session('user_id'));
+        UserRequest::where('request_id', session('user_id'))->delete();
 
 
         return view('student.eligibility');
     }
-
-    
 
 }

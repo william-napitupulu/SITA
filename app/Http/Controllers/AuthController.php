@@ -46,6 +46,8 @@ class AuthController extends Controller
 
         // Store the token in the session
         Session::put('api_token',$token );
+        Session::put('group_count', 0);
+
 
         // Pass the token to the view if needed
         return view('auth.login', ['api_token' =>$token ]);

@@ -40,12 +40,12 @@
         <!-- Checklist Items -->
         <div class="checklist-items-container p-3 rounded mb-4">
             @foreach([
-                'criteria_1' => 'Terdaftar di Pangkalan Data DIKTI (PD-DIKTI)',
-                'criteria_2' => 'Telah lulus evaluasi Tahun Pertama sesuai Kurikulum 2019',
-                'criteria_3' => 'Mengambil minimal 90% dari total SKS Tahap Sarjana (semester 3-6) dan lulus minimal 90% dengan nilai C atau lebih tinggi, tanpa nilai E.',
-                'criteria_4' => 'Memiliki IPK minimal 2.00 atau sesuai ketentuan program studi.',
-                'criteria_5' => 'Nilai Perilaku minimal C atau lebih tinggi sesuai ketentuan program studi.',
-                'criteria_6' => 'TOEFL ITP/PBT minimum 460 atau sertifikat setara yang masih berlaku'
+                'Terdaftar di PD-DIKTI' => 'Terdaftar di Pangkalan Data DIKTI (PD-DIKTI)',
+                'Lulus evaluasi tahun pertama' => 'Telah lulus evaluasi Tahun Pertama sesuai Kurikulum 2019',
+                'minimal 90% SKS terpenuhi' => 'Mengambil minimal 90% dari total SKS Tahap Sarjana (semester 3-6) dan lulus minimal 90% dengan nilai C atau lebih tinggi, tanpa nilai E.',
+                'IPK >= 2.0' => 'Memiliki IPK minimal 2.00 atau sesuai ketentuan program studi.',
+                'Perilaku C atau lebih' => 'Nilai Perilaku minimal C atau lebih tinggi sesuai ketentuan program studi.',
+                'TOEFL >= 460' => 'TOEFL ITP/PBT minimum 460 atau sertifikat setara yang masih berlaku'
             ] as $key => $label)
             <div class="form-check mb-2">
                 <input type="checkbox" class="form-check-input" name="criteria[]" value="{{ $key }}"

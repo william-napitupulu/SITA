@@ -57,7 +57,7 @@
                     <td style="text-align: left;">{{ $loop->iteration }}</td>
                     <td style="text-align: left;">{{ $request->user->name }}</td>
                     <td style="text-align: left;">
-                        @if($request->eligibility === 'All Fulfilled')
+                        @if($request->criteria === 'Terdaftar di PD-DIKTI,Lulus evaluasi tahun pertama,minimal 90% SKS terpenuhi,IPK >= 2.0,Perilaku C atau lebih,TOEFL >= 460')
                         <span class="badge badge-success">All Fulfilled</span>
                         @else
                         <span class="badge badge-danger">Some Not Fulfilled</span>
@@ -117,6 +117,7 @@
                     @endforeach
                 </ul>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
