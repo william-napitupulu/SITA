@@ -49,7 +49,7 @@ class ProfileController extends Controller
 
         $user->save(); // Save updated user data
 
-        return response()->json(['success' => true, 'message' => 'Profile updated successfully!']);
+        return back()->with('success', 'Profile updated successfully.');
     }
 
 

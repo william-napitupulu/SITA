@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
         
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-    Route::post('/profile/settings', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Thesis Routes
     Route::get('/thesis1', [ThesisController::class, 'showThesisPage1'])->name('thesis1');

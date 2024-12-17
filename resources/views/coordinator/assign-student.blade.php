@@ -68,7 +68,7 @@
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $student->batch ?? '-' }}</td>
                                 <td>{{ $student->nim ?? '-' }}</td>
-                                <td>{{ $student->name ?? '-' }}</td>
+                                <td>{{ $student->student->name ?? '-' }}</td>
                                 <td>{{ $student->supervisor->name ?? '-' }}</td>
                                 <td>
                                     <input type="text" name="groups[{{ $student->id }}]" 

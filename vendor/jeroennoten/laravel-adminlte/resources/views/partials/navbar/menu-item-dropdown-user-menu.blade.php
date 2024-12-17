@@ -1,10 +1,16 @@
 <!-- Profile Dropdown Menu -->
 <li class="nav-item dropdown">
     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-        <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('default-avatar.png') }}"
-             class="user-image img-circle elevation-2"
-             alt="{{ Auth::user()->name }}" width="30" height="30">
+    <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('default-avatar.png') }}"
+         alt="{{ Auth::user()->name }}"
+         class="user-image img-circle elevation-2" width="30" height="30">
     </a>
+
+    {{-- Debugging the asset path --}}
+    <div style="color: red; font-size: 12px;">
+        Debug Path: {{ asset('storage/' . Auth::user()->profile_photo) }}
+    </div>
+
     <div class="dropdown-menu dropdown-menu-right">
         <!-- Profile Link -->
         <a href="#" class="dropdown-item" id="openProfileModal">
