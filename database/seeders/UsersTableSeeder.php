@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
 
         ]);
 
-        User::create([
+        User::create([-
             'name' => 'Amelia Agustina Hutajulu',
             'username' => 'ifs20044',
             'password' => Hash::make('student'),

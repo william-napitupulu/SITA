@@ -46,10 +46,12 @@ class AssignStudentController extends Controller
                     
                 ]);
             }
+            
         }
 
-        return redirect()->route('assign.students')
-            ->with('success', 'Students and groups assigned successfully!');
+        
+
+        return redirect()->route('assign.students')->with('success', 'Students and groups assigned successfully!');
     }
 
 }

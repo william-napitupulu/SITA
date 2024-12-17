@@ -42,6 +42,7 @@ class EligibilityController extends Controller
 
         return back()->with('success', 'Status updated successfully.');
     }
+    
     public function resetForm()
     {
         $user = Auth::user();
@@ -52,6 +53,8 @@ class EligibilityController extends Controller
             // Update status to "Not Approved"
             $user->update(['status' => 'Not Approved']);
         }
+
+        
 
 
         return view('student.eligibility');

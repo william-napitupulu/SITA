@@ -2,87 +2,64 @@
 
 @section('title', 'Student Data')
 
-
 @section('content_header')
 <div class="p-3 bg-white w-100 d-flex justify-content-between align-items-center">
     <!-- Title Section -->
     <h1 class="text-primary font-weight-bold mb-0">Student Data</h1>
-    
     <!-- Breadcrumbs Section -->
     <small class="breadcrumb mb-0 text-muted">
         <a href="#" class="text-secondary">Home</a> > <span>Student Data</span>
     </small>
 </div>
 
-
-<!-- Guidance Section -->
 <div class="container-fluid mt-4">
-    <!-- Judul dengan Latar Biru -->
     <h5 class="text-white p-3 rounded" style="background-color: #4285f4;">Guidance Group with Supervising Lecturer</h5>
-    
 @stop
 
 @section('content')
-<!-- Main Content -->
 <div class="container bg-white p-4 mt-3 rounded shadow-sm">
     <!-- Supervisor Selection -->
-    <form id="assignForm" method="POST" action="{{ route('assign.students.submit') }}">
-        @csrf
-        <div class="mb-3">
-            <label for="supervisorSelect" class="form-label"><strong>Select Supervisor:</strong></label>
-            <select id="supervisorSelect" name="supervisor_id" class="form-select" required>
-                <option value="">Select Supervisor...</option>
-                @foreach($supervisors as $supervisor)
-                    <option value="{{ $supervisor->id }}">{{ $supervisor->name }}</option>
-                @endforeach
-            </select>
-        </div>
+    <div class="mb-3">
+        <label for="supervisorSelect" class="form-label"><strong>Select Supervisor:</strong></label>
+        <select id="supervisorSelect" name="supervisor_id" class="form-select" required>
+            <option value="">Select Supervisor...</option>
+            @foreach($supervisors as $supervisor)
+                <option value="{{ $supervisor->id }}">{{ $supervisor->name }}</option>
+            @endforeach
+        </select>
+    </div>
 
-     <!-- Table of Students -->
-     <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Batch</th>
-                        <th>NIM</th>
-                        <th>Student Name</th>
-                        <th>Supervisor</th>
-                        <th>Group</th>
-                        
+    <!-- Group Name -->
+    <h5 id="groupTitle" class="text-primary mb-3" style="display: none;">Group: <span id="groupName"></span></h5>
+
+    <!-- Table of Students -->
+    <div class="table-responsive" id="tableContainer" style="display: none;">
+        <table id="studentTable" class="table table-bordered">
+            <thead class="bg-light">
+                <tr>
+                    <th>#</th>
+                    <th>Batch</th>
+                    <th>NIM</th>
+                    <th>Student Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($students as $key => $student)
+                    <tr data-supervisor="{{ $student->supervisor_id }}" data-group="{{ $student->group ?? '' }}">
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $student->batch ?? '-' }}</td>
+                        <td>{{ $student->nim ?? '-' }}</td>
+                        <td>{{ $student->student->name ?? '-' }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach($students as $key => $student)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td>{{ $student->batch ?? '-' }}</td>
-                            <td>{{ $student->nim ?? '-' }}</td>
-                            <td>{{ $student->student->name ?? '-' }}</td>
-                            <td>{{ $student->supervisor->name ?? '-' }}</td>
-                            <td>
-                                <input type="text" name="groups[{{ $student->student_id }}]" 
-                                       value="{{ $student->group ?? '' }}" 
-                                       class="form-control">
-                            </td>
-                            <td class="text-center">
-                                
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-    <!-- Placeholder for Student Data Table -->
-    <div id="studentsTableContainer" class="mt-4"></div>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 @stop
 
 @section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
 <style>
-    /* Breadcrumb Styles */
     .breadcrumb {
         text-align: right;
     }
@@ -96,63 +73,93 @@
         font-weight: bold;
     }
 
-    /* Rounded Style */
-    .rounded {
-        border-radius: 5px;
-    }
-
-    /* Form Styles */
     .form-control {
         border: 1px solid #ced4da;
         border-radius: 5px;
         padding: 10px;
     }
 
-    label {
-        display: inline-block;
-        margin-bottom: 5px;
-        color: #333;
-    }
-
-    /* Title Alignment */
     h5 {
-        font-size: 1.5rem; /* Larger font size for Student Data */
+        font-size: 1.5rem;
     }
 
-    p {
-        font-size: 1rem; /* Standard font size for Guidance text */
-        margin-top: 5px;
+    .rounded {
+        border-radius: 5px;
     }
 
-    .bg-primary {
-        background-color: #4a90e2 !important;
-        color: white;
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+
+    /* Group Title Styling */
+    #groupTitle {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    /* Table Styling */
+    .table {
+        border: 1px solid #dee2e6;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
     }
 </style>
 @stop
 
 @section('js')
+<!-- Include Select2 for Typeable Dropdown -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css">
+
 <script>
-    // AJAX call to fetch students based on supervisor selection
-    $('#supervisorDropdown').change(function() {
-        var supervisorId = $(this).val();
-        if (supervisorId) {
-            $.ajax({
-                url: '/get-students/' + supervisorId,
-                method: 'GET',
-                success: function(response) {
-                    // Update the student data table
-                    $('#studentsTableContainer').html(response);
-                },
-                error: function() {
-                    alert('Error fetching data');
+    $(document).ready(function () {
+        // Make the Supervisor Dropdown typeable with Select2
+        $('#supervisorSelect').select2({
+            placeholder: "Select Supervisor...",
+            allowClear: true
+        });
+
+        $('#supervisorSelect').on('change', function () {
+            var selectedSupervisorId = $(this).val();
+            var tableContainer = $('#tableContainer');
+            var groupTitle = $('#groupTitle');
+            var groupNameSpan = $('#groupName');
+
+            if (selectedSupervisorId === '') {
+                tableContainer.hide(); // Hide table if no supervisor is selected
+                groupTitle.hide(); // Hide group title
+            } else {
+                tableContainer.show(); // Show table when supervisor is selected
+
+                // Loop through rows and filter based on the selected supervisor
+                var firstGroup = null;
+                $('#studentTable tbody tr').each(function () {
+                    var rowSupervisorId = $(this).data('supervisor');
+                    var rowGroup = $(this).data('group');
+
+                    if (rowSupervisorId == selectedSupervisorId) {
+                        $(this).show();
+                        if (!firstGroup) {
+                            firstGroup = rowGroup; // Capture the group name
+                        }
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // Update Group Title
+                if (firstGroup) {
+                    groupNameSpan.text(firstGroup);
+                    groupTitle.show();
+                } else {
+                    groupTitle.hide();
                 }
-            });
-        } else {
-            // Clear the table if no supervisor is selected
-            $('#studentsTableContainer').html('');
-        }
+            }
+        });
     });
 </script>
 @stop

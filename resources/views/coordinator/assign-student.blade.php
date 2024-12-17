@@ -25,7 +25,7 @@
                     <strong>Thesis Grouping</strong>
                 </div>
                 <div class="card-body d-flex align-items-center justify-content-between">
-                    <!-- Label dan Dropdown Supervisor -->
+                    <!-- Label and Dropdown Supervisor -->
                     <div class="d-flex align-items-center">
                         <label for="supervisorSelect" class="form-label mb-0 me-2">
                             <strong>Select Supervisor:</strong>
@@ -37,7 +37,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <!-- Tombol Assign ke kanan total -->
+                    <!-- Assign Button -->
                     <div class="d-flex justify-content-end flex-grow-1">
                         <button type="button" id="assignButton" class="btn btn-success">Assign</button>
                     </div>
@@ -95,23 +95,106 @@
     </footer>
 </div>
 
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header bg-white border-0">
+                <h5 class="modal-title fw-bold" id="confirmationModalLabel" style="font-size: 1.2rem;">
+                    <i class="fa fa-exclamation-circle text-warning me-2" style="font-size: 1.5rem;"></i>
+                    Confirmation Required !
+                </h5>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4" style="font-size: 1rem;">Are you sure you want to assign this supervisor?</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" id="confirmAssign" class="btn btn-success" style="width: 80px;">Yes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 80px;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Supervisor Not Selected Modal -->
+<div class="modal fade" id="noSupervisorModal" tabindex="-1" aria-labelledby="noSupervisorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="noSupervisorModalLabel"><i class="fa fa-exclamation-triangle me-2"></i> Error</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Please select a supervisor before assigning students!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Max Students Exceeded Modal -->
+<div class="modal fade" id="maxStudentsModal" tabindex="-1" aria-labelledby="maxStudentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="maxStudentsModalLabel"><i class="fa fa-exclamation-triangle me-2"></i> Warning</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                You can only assign a maximum of 3 students to a supervisor!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const assignButton = document.getElementById('assignButton');
         const supervisorSelect = document.getElementById('supervisorSelect');
         const checkboxes = document.querySelectorAll('.student-checkbox');
 
+        const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         const noSupervisorModal = new bootstrap.Modal(document.getElementById('noSupervisorModal'));
+        const maxStudentsModal = new bootstrap.Modal(document.getElementById('maxStudentsModal'));
 
+        const confirmAssign = document.getElementById('confirmAssign');
+        
         assignButton.addEventListener('click', function () {
             const selectedSupervisor = supervisorSelect.value;
+            const selectedStudents = Array.from(checkboxes).filter(cb => cb.checked);
 
             if (!selectedSupervisor) {
                 noSupervisorModal.show();
                 return;
             }
 
-            alert('Supervisor assigned successfully!');
+            if (selectedStudents.length > 3) {
+                maxStudentsModal.show();
+                return;
+            }
+
+            confirmationModal.show();
+
+            confirmAssign.onclick = function () {
+                // Logic to submit the form
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ route("assign.students.submit") }}';
+                form.innerHTML = `
+                    @csrf
+                    <input type="hidden" name="supervisor_id" value="${selectedSupervisor}">
+                    ${selectedStudents.map(student => `<input type="hidden" name="students[]" value="${student.value}">`).join('')}
+                `;
+                document.body.appendChild(form);
+                form.submit();
+            };
         });
     });
 </script>

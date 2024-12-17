@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('id_number');
-            $table->string('email');
             $table->date('date_of_birth');
             $table->string('phone_number')->nullable();
             $table->enum('eligibility_status', ['eligible', 'not_eligible', 'pending'])->default('pending');

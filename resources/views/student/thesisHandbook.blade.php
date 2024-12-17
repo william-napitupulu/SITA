@@ -6,15 +6,15 @@
 @section('content_header')
 <!-- Full-width Header -->
 <div class="full-width-header bg-light shadow-sm p-3">
-  <div class="container-fluid d-flex justify-content-between align-items-center">
-    <h1 class="header-title thesis-header mb-0">Thesis Handbook</h1>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Thesis Handbook</li>
-      </ol>
-    </nav>
-  </div>
+    <div class="d-flex justify-content-between align-items-center px-3">
+        <h1 class="header-title thesis-header mb-0">Thesis Handbook</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Thesis Handbook</li>
+            </ol>
+        </nav>
+    </div>
 </div>
 
 <!-- Box "Preview and Download Handbook" -->
@@ -112,8 +112,11 @@
   border-radius: 10px;
   padding: 45px 30px !important;
   box-sizing: border-box;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  margin-top: 6px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin-top: 15px !important;
+  margin-left: 18px !important;
+  min-height: 500px; /* Adjust this value to stretch the box down */
+
 
 }
 
@@ -124,6 +127,8 @@
   background-color: #ffffff;
   border-bottom: 4px solid rgba(217, 217, 217, 0.5);
   padding: 14px 30px;
+  margin-top: 20px;
+  margin-left: 20px;
   display: flex;
   align-items: center;
 }
@@ -218,12 +223,16 @@
 }
 
 .full-width-header {
+  width: calc(90% - 100px); /* Subtract sidebar width */
   width: 100%;
   background-color: #FFFFFF !important;
-  border-bottom: 1px solid #d1d5da;
-  z-index: 10;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 30px; /* Remove negative margins */
+  padding: 0; /* Remove default padding */
   position: relative;
+  z-index: 10;
 }
+
 
 .full-width-header .thesis-header {
   font-family: 'Inter', sans-serif;

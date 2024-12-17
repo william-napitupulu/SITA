@@ -18,7 +18,6 @@ class StudentController extends Controller
          // Fetch all supervisors (assuming supervisors are identified by their role)
          $supervisors = User::where('role', 'lecturer')->get();
          
-    
         return view('lecturer.studentData', compact('students', 'supervisors'));
 
     }

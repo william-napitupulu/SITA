@@ -33,7 +33,7 @@
 }
 
 .table-bordered tbody tr:nth-child(even) {
-    background-color: #fffff; /* Abu-abu untuk baris genap */
+    background-color: #ffffff; /* Abu-abu untuk baris genap */
 }
 .modal-body {
     background-color: #ffffff !important; /* Warna putih */

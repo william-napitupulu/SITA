@@ -6,10 +6,6 @@
          class="user-image img-circle elevation-2" width="30" height="30">
     </a>
 
-    {{-- Debugging the asset path --}}
-    <div style="color: red; font-size: 12px;">
-        Debug Path: {{ asset('storage/' . Auth::user()->profile_photo) }}
-    </div>
 
     <div class="dropdown-menu dropdown-menu-right">
         <!-- Profile Link -->
