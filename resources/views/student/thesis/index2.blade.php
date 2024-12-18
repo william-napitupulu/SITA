@@ -32,8 +32,8 @@
         <!-- Dropdown (select box) -->
         <select id="templateDropdown" class="form-control w-auto">
             <option value="select">Select</option>
-            <option value="Seminar Proposal">Seminar Hasil</option>
-            <option value="Seminar TA-1">Seminar TA-2</option>
+            <option value="Seminar Hasil">Seminar Hasil</option>
+            <option value="Seminar TA-2">Seminar TA-2</option>
         </select>
     </div>
 
@@ -106,11 +106,12 @@
 
         // Based on the selected option, trigger the file download
         if (selectedOption === 'Seminar Hasil') {
-            // Force download for Seminar Proposal (PDF)
-            window.location.href = "/download-pdf"; // Custom route for PDF download
+            // Force download for Seminar Hasil (ZIP)
+
+            window.location.href = "{{ asset('storage/files/Kit Prasidang S1IF.zip') }}"; // Custom route for PDF download
         } else if (selectedOption === 'Seminar TA-2') {
             // Trigger the download for Seminar TA-1 (ZIP)
-            window.location.href = "{{ asset('storage/files/Seminar TA 1.zip') }}";
+            window.location.href = "{{ asset('storage/files/Kit_TA II S1 IF 2425.zip') }}";
         }
     });
 </script>
