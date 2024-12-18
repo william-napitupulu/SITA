@@ -2,8 +2,8 @@
 
 @section('content_header')
 <div class="d-flex justify-content-between align-items-center bg-white w-100">
-    <h1 class="text-primary mb-0">Thesis Seminar 1</h1>
-    <small class="text-muted mb-0" style="font-size: 1rem;">Home > My Progress > Thesis Seminar 1</small>
+    <h1 class="text-primary mb-0">Thesis Seminar 2</h1>
+    <small class="text-muted mb-0" style="font-size: 1rem;">Home > My Progress > Thesis Seminar 2</small>
 </div>
 @stop
 
@@ -14,7 +14,7 @@
         <div class="col-md-12 text-left">
             <div class="alert text-left">
                 <h2 class="d-inline-block align-middle ml-3">
-                    <i class="fa fa-download"></i> Download Kit Template Thesis Seminar 1
+                    <i class="fa fa-download"></i> Download Kit Template Thesis Seminar 2
                 </h2>
             </div>
         </div>

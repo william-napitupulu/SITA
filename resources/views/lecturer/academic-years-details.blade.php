@@ -3,8 +3,15 @@
 @section('title', 'Academic Year Details')
 
 @section('content')
+
+
 <div class="container">
-    <h1 class="mb-4">Academic Year: {{ $year }}</h1>
+    <div class="full-width-header bg-light shadow-sm p-3">
+        <div class="d-flex justify-content-between align-items-center px-3">
+            <h1 class="header-title thesis-header mb-0">Academic Year: {{ $year }}</h1>
+        
+        </div>
+    </div>
 
     <div class="card">
         <div class="card-header">
@@ -19,7 +26,7 @@
             <!-- Table for Student Data -->
             <div class="table-responsive">
                 <table class="table table-bordered" id="studentTable">
-                    <thead class="table-light">
+                    <thead class="table-light bg-primary">
                         <tr>
                             <th>#</th>
                             <th>Batch</th>
@@ -50,6 +57,36 @@
         </div>
     </div>
 </div>
+
+@section('css')
+<style>
+
+.full-width-header {
+  width: calc(90% - 100px); /* Subtract sidebar width */
+  width: 100%;
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 30px; /* Remove negative margins */
+  padding: 0; /* Remove default padding */
+  position: relative;
+  z-index: 10;
+}
+.full-width-header .thesis-header {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700 !important;
+  /* Ubah menjadi bold */
+  color: #0079C2;
+  /* Warna biru */
+  font-size: 1.8rem;
+  /* Ukuran font lebih besar */
+  margin-left: 0 !important;
+  /* Dekatkan ke kiri */
+  margin-right: 0;
+  /* Tidak ada jarak di kanan */
+}
+
+</style>
+@stop
 
 <!-- JavaScript for Search -->
 <script>
